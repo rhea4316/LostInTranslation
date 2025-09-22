@@ -51,14 +51,24 @@ public class JSONTranslator implements Translator {
 
                 List<String> languages = new ArrayList<>();
 
-                // TODO Task C: record this countryCode in the correct instance variable
+                // (DONE) Task C: record this countryCode in the correct instance variable
+                countryCodes.add(countryCode);
 
                 // iterate through the other keys to get the information that we need
                 for (String key : countryData.keySet()) {
                     if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3")) {
                         String languageCode = key;
-                        // TODO Task C: record this translation in the appropriate instance variable
+                        // (DONE) Task C: record this translation in the appropriate instance variable
+                        String translation = countryData.getString(languageCode);
+                        // example: "can-es" goes with "Canadá"
+                        translations.put(countryCode + "-" + languageCode, translation);
 
+                        // add language code to languageCodes list (only if not already there)
+                        if (!languageCodes.contains(languageCode)) {
+                            languageCodes.add(languageCode);
+                        }
+
+                        // add language code to current country's language list (only if not already there)
                         if (!languages.contains(languageCode)) {
                             languages.add(languageCode);
                         }
@@ -73,8 +83,8 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getLanguageCodes() {
-        // TODO Task C: return a copy of the language codes
-        return new ArrayList<>();
+        // (DONE) Task C: return a copy of the language codes
+        return new ArrayList<>(languageCodes);
     }
 
     @Override
@@ -84,7 +94,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String countryCode, String languageCode) {
-        // TODO Task C: complete this method using your instance variables as needed
-        return "JSONTranslator's translate method is not implemented!";
+        // (DONE) Task C: complete this method using your instance variables as needed
+        return translations.get(countryCode + "-" + languageCode);
     }
 }

@@ -13,6 +13,12 @@ public class LanguageCodeConverterTest {
     }
 
     @Test
+    public void fromLanguage() {
+        LanguageCodeConverter converter = new LanguageCodeConverter();
+        assertEquals("ng", converter.fromLanguage("Ndonga"));
+    }
+
+    @Test
     public void fromLanguageCodeAllLoaded() {
         LanguageCodeConverter converter = new LanguageCodeConverter();
         assertEquals(184, converter.getNumLanguages());

@@ -14,8 +14,8 @@ public class GUI {
     public static final StringBuilder translateLanguageCode = new StringBuilder("AB");
     public static final StringBuilder translateCountryCode = new StringBuilder("AFG");
     //setting up the translater and converters
-    public static LanguageCodeConverter languageCodeConverter = new LanguageCodeConverter();
-    public static CountryCodeConverter countryCodeConverter = new CountryCodeConverter();
+    public static final LanguageCodeConverter languageCodeConverter = new LanguageCodeConverter();
+    public static final CountryCodeConverter countryCodeConverter = new CountryCodeConverter();
 
 
     public static void main(String[] args) {
@@ -79,11 +79,13 @@ public class GUI {
 
                     if (e.getStateChange() == ItemEvent.SELECTED) {
                         String language = Objects.requireNonNull(languagesComboBox.getSelectedItem()).toString();
-
-                        //NOT WORKINGG, the converter method always return null
-
                         GUI.translateLanguageCode.setLength(0);
-                        GUI.translateLanguageCode.append(languageCodeConverter.fromLanguage(language));
+                        String lanCode = languageCodeConverter.fromLanguage(language);
+                        if (lanCode == null || lanCode.isEmpty()) {
+                            System.err.println("fromLanguage() returned null/empty for: '" + language + "'");
+                            return; // don't overwrite the builder with "null"
+                        }
+                        GUI.translateLanguageCode.append(lanCode);
 
                         resultLabel.setText("Translation: " + translator.translate(translateCountryCode.toString(), translateLanguageCode.toString()));
                     }
@@ -108,9 +110,14 @@ public class GUI {
                         items[i] = list.getModel().getElementAt(indices[i]);
                     }
                     String country = items[0];
-                    //NOT WORKINGG, the converter method always return null
                     translateCountryCode.setLength(0);
-                    translateCountryCode.append(countryCodeConverter.fromCountry(country));
+                    String code = countryCodeConverter.fromCountry(country); // may be null
+                    if (code == null || code.isEmpty()) {
+                        System.err.println("fromCountry() returned null/empty for: '" + country + "'");
+                        return;
+                    }
+
+                    translateCountryCode.append(code);
 
                     resultLabel.setText("Translation: " + translator.translate(translateCountryCode.toString(), translateLanguageCode.toString()));
                 }
